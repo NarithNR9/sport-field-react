@@ -7,6 +7,12 @@ import Header from './components/Header'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Register from './pages/Register'
+import LoginOwner from './pages/LoginOwner'
+import MyFields from './pages/MyFields'
+import CreateField from './pages/CreateField'
+import UpdateField from './pages/UpdateField'
+import Footer from './components/Footer'
+import FieldDetail from './pages/FieldDetail'
 
 
 function App() {
@@ -17,8 +23,14 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/login/owner' element={<LoginOwner />} />
           <Route path='/register' element={<Register />} />
-        </Routes>
+          <Route path='/myfields' element={<MyFields />} />
+          <Route path='/createfield' element={<CreateField />} />
+          <Route path='/updatefield/:fieldId' element={<UpdateField />} />
+          <Route path='/field/:fieldId' element={<FieldDetail />}/>
+        </Routes> 
+        <Footer />
       </Router>
       <ToastContainer />
     </>

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { FaSignInAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
+import { FaSignInAlt, FaSignOutAlt, FaUser, FaUserCircle } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout, reset } from '../features/auth/authSlice'
+import { logout, logoutOwner, reset } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
 
 export default function Header() {
@@ -12,21 +12,15 @@ export default function Header() {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { player } = useSelector((state) => state.auth)
+  const { player, owner } = useSelector((state) => state.auth)
 
   const onLogout = () => {
     dispatch(logout())
+    dispatch(logoutOwner())
     dispatch(reset())
     navigate('/')
   }
 
-
-  useEffect(() => {
-    window.addEventListener(
-      'resize',
-      () => window.innerWidth >= 960 && setOpenNav(false)
-    )
-  }, [])
 
   useEffect(() => {
     // On page load or when changing themes, best to add inline in `head` to avoid FOUC
@@ -69,7 +63,7 @@ export default function Header() {
     },
     {
       title: 'Register',
-      link: '/auth',
+      link: '/register',
     },
   ]
 
@@ -91,112 +85,246 @@ export default function Header() {
   )
 
   return (
-    <nav className=' px-4 lg:px-8 w-full dark:bg-dark bg-light '>
-      <div className='container mx-auto flex items-center justify-between text-blue-gray-900'>
-        <Link to='/' className='lg:flex'>
-          <img src={logo} alt='' width={80} height={80} className='m-3' />
-          <p className='text-text-light dark:text-text-dark self-center text-2xl lg:block hidden'>
-            Sport Field KH
-          </p>
-        </Link>
-        <div className='hidden lg:block'>{navList}</div>
-        <div className='relative inline-block text-left'>
-          <div className={`flex`}>
-            <div className='px-2 rounded self-center'>
-              <label
-                htmlFor='default-toggle-2'
-                className='inline-flex relative items-center w-full cursor-pointer'
-              >
-                <input
-                  type='checkbox'
-                  value=''
-                  checked={theme === 'dark'}
-                  id='default-toggle-2'
-                  className='sr-only peer'
-                  onChange={DarkModeHandler}
-                />
-                <div className="w-9 h-3 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-500 peer-checked:bg-blue-600"></div>
-                <span className='ml-3 text-sm font-medium text-text-light dark:text-text-dark'>
-                  {theme === 'dark' ? 'Light' : 'Dark'}
-                </span>
-              </label>
-            </div>
-            <button
-              type='button'
-              onClick={() => setOpenNav(!openNav)}
-              className='lg:hidden inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium dark:text-white text-text-light shadow-sm'
-              id='menu-button'
-              aria-expanded='true'
-              aria-haspopup='true'
-            >
-              {openNav ? (
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  className='h-6 w-6'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-6 w-6'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M4 6h16M4 12h16M4 18h16'
-                  />
-                </svg>
-              )}
-            </button>
-          </div>
-          <div
-            className={`${
-              openNav ? 'absolute' : 'hidden'
-            } right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
-            role='menu'
-            aria-orientation='vertical'
-            aria-labelledby='menu-button'
-            tabIndex='-1'
+    <nav
+      className='
+  relative
+  w-full
+  flex flex-wrap
+  items-center
+  justify-between
+  py-4
+  px-8
+  bg-gray-100
+  text-gray-500
+  hover:text-gray-700
+  focus:text-gray-700
+  shadow-lg
+  navbar navbar-expand-lg navbar-light
+  '
+    >
+      <div className='container-fluid w-full flex flex-wrap items-center justify-between px-6'>
+        <button
+          className='
+      navbar-toggler
+      text-gray-500
+      border-0
+      hover:shadow-none hover:no-underline
+      py-2
+      px-2.5
+      bg-transparent
+      focus:outline-none focus:ring-0 focus:shadow-none focus:no-underline
+    '
+          type='button'
+          data-bs-toggle='collapse'
+          data-bs-target='#navbarSupportedContent'
+          aria-controls='navbarSupportedContent'
+          aria-expanded='false'
+          aria-label='Toggle navigation'
+        >
+          <svg
+            aria-hidden='true'
+            focusable='false'
+            data-prefix='fas'
+            data-icon='bars'
+            className='w-6'
+            role='img'
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 448 512'
           >
-            {navList}
-          </div>
-        </div>
-        <ul className='block'>
-          {player ? (
-            <li>
-              <span>Welcome {player.name} </span>
-              <button className='btn' onClick={onLogout}>
-                <FaSignOutAlt />
-                Logout
-              </button>
+            <path
+              fill='currentColor'
+              d='M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z'
+            ></path>
+          </svg>
+        </button>
+        <div
+          className='collapse navbar-collapse flex-grow items-center'
+          id='navbarSupportedContent'
+        >
+          <a
+            className='
+        flex
+        items-center
+        text-gray-900
+        hover:text-gray-900
+        focus:text-gray-900
+        mt-2
+        lg:mt-0
+        mr-1
+        w-12
+      '
+            href='/'
+          >
+            <img
+              src={logo}
+              // style={{ height: '15px' }}
+              alt=''
+              loading='lazy'
+            />
+          </a>
+          {/* Left links */}
+          <ul className='navbar-nav flex flex-col pl-0 list-style-none mr-auto'>
+            <li className='nav-item p-2'>
+              <Link
+                className='nav-link text-xl text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0 font-semibold'
+                to='/'
+              >
+                Sport Field Kh
+              </Link>
             </li>
-          ) : (
-            <>
-              <li>
-                <Link to='/login'>
-                  <FaSignInAlt /> Login
-                </Link>
+            {/* <li className='nav-item p-2'>
+              <Link
+                className='nav-link text-xl text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0'
+                to='/'
+              >
+                Team
+              </Link>
+            </li>
+            <li className='nav-item p-2'>
+              <Link
+                className='nav-link text-xl text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0'
+                to='/'
+              >
+                Projects
+              </Link>
+            </li> */}
+          </ul>
+          {/* Left links */}
+        </div>
+        {/* Collapsible wrapper */}
+        {/* Right elements */}
+        <div className='flex items-center relative'>
+          {/* Icon */}
+
+          <div className='dropdown relative'></div>
+          <ul className='flex space-x-5'>
+            {player || owner ? (
+              <li className='nav-item p-2'>
+                <span>Welcome {player?.name || owner?.name} </span>
+                <button className='btn'>
+                  <div className='dropdown relative'>
+                    <a
+                      className='dropdown-toggle flex items-center hidden-arrow'
+                      href='/'
+                      id='dropdownMenuButton2'
+                      role='button'
+                      data-bs-toggle='dropdown'
+                      aria-expanded='false'
+                    >
+                      <FaUserCircle size={30} />
+                    </a>
+                    <ul
+                      className='
+    dropdown-menu
+    min-w-max
+    absolute
+    hidden
+    bg-white
+    text-base
+    z-50
+    float-left
+    py-2
+    list-none
+    text-left
+    rounded-lg
+    shadow-lg
+    mt-1
+    m-0
+    bg-clip-padding
+    border-none
+    left-auto
+    right-0
+  '
+                      aria-labelledby='dropdownMenuButton2'
+                    >
+                      <li>
+                        <a
+                          className='
+        dropdown-item
+        text-sm
+        py-2
+        px-4
+        font-normal
+        block
+        w-full
+        whitespace-nowrap
+        bg-transparent
+        text-gray-700
+        hover:bg-gray-100
+      '
+                          href='/'
+                        >
+                          Profile
+                        </a>
+                      </li>
+
+                      <li>
+                        <Link
+                          className='
+        dropdown-item
+        text-sm
+        py-2
+        px-4
+        font-normal
+        block
+        w-full
+        whitespace-nowrap
+        bg-transparent
+        text-gray-700
+        hover:bg-gray-100
+      '
+                          href='/'
+                          to={owner ? 'myfields' : 'mybooking'}
+                        >
+                          {player && (<p>My Booking</p>)}
+                          {owner && (<p>My Fields</p>)}
+                        </Link>
+                      </li>
+
+                      <li>
+                        <a
+                          className='
+        dropdown-item
+        text-sm
+        py-2
+        px-4
+        font-normal
+        block
+        w-full
+        whitespace-nowrap
+        bg-transparent
+        text-gray-700
+        hover:bg-gray-100
+      '
+                          href='/'
+                        >
+                          <div className='flex' onClick={onLogout}>
+                            <FaSignOutAlt />
+                            Logout
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </button>
               </li>
-              <li>
-                <Link to='/register'>
-                  <FaUser /> Register
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
+            ) : (
+              <>
+                <li>
+                  <Link to='/login'>
+                    <FaSignInAlt /> Login
+                  </Link>
+                </li>
+                <li>
+                  <Link to='/register'>
+                    <FaUser /> Register
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+        {/* Right elements */}
       </div>
     </nav>
   )

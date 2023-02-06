@@ -12,10 +12,10 @@ const Register = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { player, isLoading, isSuccess, isError, message } = useSelector(
+  const {  isLoading, isSuccess, isError, message } = useSelector(
     (state) => state.auth
   )
-  
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -35,7 +35,7 @@ const Register = () => {
     phoneNumber,
     district,
     lat,
-    lng
+    lng,
   } = formData
 
   const District = [
@@ -122,10 +122,10 @@ const Register = () => {
         // console.log(lat)
       })
     }
-  },[isError, isSuccess, player, message, navigate, dispatch])
+  }, [isError, isSuccess, message, navigate, dispatch])
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (password !== confirmPassword) {
       toast.error('Passwords do not match')
     } else {
@@ -138,7 +138,7 @@ const Register = () => {
       ...prevState,
       [e.target.name]: e.target.value,
       lat: Lat,
-      lng: Lng
+      lng: Lng,
     }))
   }
 
@@ -197,7 +197,7 @@ const Register = () => {
                           onChange={onChange}
                         />
                       </div>
-                      <div className='mb-4 flex gap-3'>
+                      <div className='mb-4 gap-3 hidden'>
                         <div>
                           <label htmlFor='lat' className='block'>
                             Latitude
@@ -264,7 +264,7 @@ const Register = () => {
                           onChange={onChange}
                         />
                       </div>
-                      <div className='text-center pt-1 mb-12 pb-1'>
+                      <div className='text-center pt-1 mb-5 pb-1'>
                         <button
                           className='bg-green-500 duration-300 inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full mb-3'
                           type='submit'
@@ -287,13 +287,14 @@ const Register = () => {
                 >
                   <div className='text-white px-4 py-6 md:p-12 md:mx-6'>
                     <h4 className='text-xl font-semibold mb-6'>
-                      We are more than just a company
+                      We make sport more fun.
                     </h4>
                     <p className='text-sm'>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                      Playing sports helps you stay in shape, teaches you how to
+                      organize your time, boosts friendships, and builds
+                      relationships with your peers and adults. Through
+                      athletics, you gain skills that can best be acquired on a
+                      court, track, or field.
                     </p>
                   </div>
                 </div>

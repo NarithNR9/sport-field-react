@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import logo from '../assets/logo.png'
 import { useSelector, useDispatch } from 'react-redux'
-import { login, reset } from '../features/auth/authSlice'
+import { loginOwner, reset } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
 import { useNavigate, Link } from 'react-router-dom'
 
-// import Register from './Register'
-// import login from '../../api/admin'
-
-const Login = () => {
+const LoginOwner = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const { player, isLoading, isSuccess, isError, message } = useSelector(
+  const { owner, isLoading, isSuccess, isError, message } = useSelector(
     (state) => state.auth
   )
 
@@ -22,9 +19,6 @@ const Login = () => {
     password: '',
   })
   const { email, password } = formData
-  const OnclickHandler = () => {
-    navigate('/register')
-  }
 
   const handleChange = (e) => {
     setFormData((prevState) => ({
@@ -40,7 +34,7 @@ const Login = () => {
       password,
     }
 
-    dispatch(login(userData))
+    dispatch(loginOwner(userData))
     // const data = await login(formData)
     // if (data.status !== 200) {
     //   alert('khos aii bro')
@@ -56,14 +50,22 @@ const Login = () => {
     }
 
     // redirect when logged in
-    if (isSuccess || player) {
+    if (isSuccess || owner) {
       navigate('/')
     }
 
     dispatch(reset())
 
-
-  }, [isError, isSuccess, player, message, navigate, dispatch])
+    if (
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [isError, isSuccess, owner, message, navigate, dispatch])
   return (
     <section className=' bg-light dark:bg-dark'>
       <div className='container py-10 px-6 mx-auto'>
@@ -80,11 +82,11 @@ const Login = () => {
                     <div className='text-center'>
                       <img className='mx-auto w-48' src={logo} alt='logo' />
                       <h4 className='text-xl font-semibold mt-1 mb-12 pb-1'>
-                        Welcome to Sport Field Kh
+                        Welcome to Owner Login
                       </h4>
                     </div>
                     <form onSubmit={handleLogin}>
-                      <p className='mb-4'>Player Login</p>
+                      <p className='mb-4'>Owner Login</p>
                       <div className='mb-4'>
                         <input
                           required
@@ -109,10 +111,12 @@ const Login = () => {
                       </div>
                       <div className='text-center pt-1 mb-5 pb-1'>
                         <button
-                          className='bg-green-500 inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full mb-3'
+                          className='bg-green-500 duration-300 inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full mb-3'
                           type='submit'
+                          data-mdb-ripple='true'
+                          data-mdb-ripple-color='light'
                         >
-                          Log in
+                          Owner Log in
                         </button>
                         <a
                           className='text-gray-500 dark:text-slate-300'
@@ -121,14 +125,9 @@ const Login = () => {
                           Forgot password?
                         </a>
                       </div>
-                      <Link to='/register'>
+                      <Link to='/login'>
                         <label htmlFor='changeForm' className='cursor-pointer'>
-                          Don't have an account?
-                        </label>
-                      </Link>
-                      <Link to='/login/owner'>
-                        <label htmlFor='admin' className='cursor-pointer pl-48'>
-                          Owner Login?
+                          Player Login?
                         </label>
                       </Link>
                     </form>
@@ -139,14 +138,15 @@ const Login = () => {
                 >
                   <div className='text-white px-4 py-6 md:p-12 md:mx-6'>
                     <h4 className='text-xl font-semibold mb-6'>
-                      We delivery sports to everyone.
+                      We are more than just a booking website.
                     </h4>
                     <p className='text-sm'>
-                      Playing sports enables you to create friendships you
-                      otherwise might not have formed. Sports bring teens
-                      together from different schools, backgrounds, and
-                      communities. Many times, the friendships you create on the
-                      field remain intact even when you are not playing sports.
+                      Participating in sports helps build leadership skills.
+                      Sports teams give you an opportunity to surround yourself
+                      with competitive people and role models, and learn from
+                      them both. You can demonstrate your own leadership through
+                      team captainships and individual actions to improve your
+                      team's success.
                     </p>
                   </div>
                 </div>
@@ -159,4 +159,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default LoginOwner
