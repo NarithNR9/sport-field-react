@@ -1,9 +1,17 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import { FaStar } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import star from '../assets/star.png'
 
 const FieldCard = ({ field }) => {
+  const [stars,setStars] = useState([])
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/field/stars/' + field.field_id).then((res) => {
+      setStars(res.data[0].avgStars)
+    })
+  })
+
   return (
     <div className='max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700'>
       <Link to=''>
@@ -21,7 +29,7 @@ const FieldCard = ({ field }) => {
             </h5>
             <div className='flex justify-between'>
               <FaStar className='mt-2 mx-1' color='yellow' />
-              <div className='text-white mt-1.5'>4.5</div>
+              <div className='text-white mt-1.5'>{stars}</div>
             </div>
           </div>
         </Link>
@@ -34,7 +42,7 @@ const FieldCard = ({ field }) => {
           </p>
         </div>
         <p className='text-base mb-3 font-normal text-gray-700 dark:text-slate-100'>
-          Average Price: ${field.average_price}
+          Average Price: ${field.average_price.split('-')[0]}-${field.average_price.split('-')[1]}
         </p>
         <Link
           to={`/field/${field.field_id}`}

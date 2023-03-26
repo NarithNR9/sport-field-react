@@ -28,11 +28,11 @@ const Right = (props) => {
   )
 }
 
-const SliderSection = ({ category }) => {
+const SliderSection = ({ fields, type }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { fields, isLoading, isError, isSuccess, message } = useSelector(
+  const { isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.fields
   )
   const settings = {
@@ -48,7 +48,7 @@ const SliderSection = ({ category }) => {
       {
         breakpoint: 1250,
         settings: {
-          slidesToShow: fields.length -1 >= 2 ? 2 : fields.length,
+          slidesToShow: fields.length - 1 >= 2 ? 2 : fields.length,
           slidesToScroll: 2,
           infinite: true,
           dots: true,
@@ -73,27 +73,22 @@ const SliderSection = ({ category }) => {
     }
   }, [dispatch, isSuccess])
 
-  useEffect(() => {
-    if (category === 'All') {
-      dispatch(getFields())
-    } else {
-      dispatch(getFieldByType(category))
-    }
-  }, [category])
+
 
   if (isLoading) {
     return <Loading />
   } else
     return (
       <div className='ml-6 mr-12 justify-center'>
-        <Slider {...settings}>
-          {fields.map((field, key) => (
-            <div className='m-3' key={key}>
-              {field.length}
-              <FieldCard field={field} />
-            </div>
-          ))}
-        </Slider>
+        {fields.length > 0 && (
+          <Slider {...settings}>
+            {fields?.map((field, key) => (
+              <div className='m-3' key={key}>
+                <FieldCard field={field} />
+              </div>
+            ))}
+          </Slider>
+        )}
       </div>
     )
 }

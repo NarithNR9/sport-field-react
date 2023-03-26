@@ -13,11 +13,12 @@ import CreateField from './pages/CreateField'
 import UpdateField from './pages/UpdateField'
 import Footer from './components/Footer'
 import FieldDetail from './pages/FieldDetail'
+import SearchField from './pages/SearchField'
 
 
 function App() {
   return (
-    <>
+    <> 
       <Router>
         <Header />
         <Routes>
@@ -29,6 +30,7 @@ function App() {
           <Route path='/createfield' element={<CreateField />} />
           <Route path='/updatefield/:fieldId' element={<UpdateField />} />
           <Route path='/field/:fieldId' element={<FieldDetail />}/>
+          <Route path='/search/:fieldName' element={<SearchField />}/>
         </Routes> 
         <Footer />
       </Router>

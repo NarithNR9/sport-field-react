@@ -1,21 +1,80 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux'
 import { getField, reset } from '../features/fields/fieldSlice'
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import Loading from '../components/Loading'
 import BackButton from '../components/BackButton'
-import { FaStar } from 'react-icons/fa'
+import { FaStar, FaStarHalfAlt } from 'react-icons/fa'
+import ReactStars from 'react-rating-stars-component'
+import axios from 'axios'
+import Booking from '../components/Booking'
 
 const FieldDetail = () => {
   const dispatch = useDispatch()
   const { fieldId } = useParams()
+  const [stars, setStars] = useState([])
+  const [rating, setRating] = useState(5)
+  const [playerRate, setPlayerRate] = useState(null)
+  const { player } = useSelector((state) => state.auth)
+  const { field, isLoading } = useSelector((state) => state.fields)
+
+  const ratingStars = {
+    size: 30,
+    count: 5,
+    color: 'black',
+    activeColor: 'yellow',
+    value: playerRate,
+    a11y: true,
+    isHalf: true,
+    emptyIcon: <FaStar />,
+    halfIcon: <FaStarHalfAlt />,
+    filledIcon: <FaStar />,
+    onChange: (newValue) => {
+      setRating(newValue)
+    },
+  }
 
   useEffect(() => {
     dispatch(getField(fieldId))
+    axios.get('http://localhost:8080/field/stars/' + fieldId).then((res) => {
+      setStars(res.data[0].avgStars)
+    })
+    if (player)
+      axios
+        .get(
+          'http://localhost:8080/field/playerRate/' + player.id + '/' + fieldId
+        )
+        .then((res) => {
+          if (res.data.length !== 0) {
+            setPlayerRate(res.data[0].stars)
+            setRating(res.data[0].stars)
+          } else {
+            setPlayerRate(0)
+            setRating(0)
+          }
+        })
   }, [dispatch])
 
-  const { field, isLoading } = useSelector((state) => state.fields)
+  const submitRate = () => {
+    axios
+      .post('http://localhost:8080/field/rate', {
+        fieldId: fieldId,
+        playerId: player.id,
+        stars: rating,
+      })
+      .then((res) => {
+        toast.success(res.data.message)
+        axios
+          .get('http://localhost:8080/field/stars/' + fieldId)
+          .then((res) => {
+            setStars(res.data[0].avgStars)
+          })
+      })
+      .catch((err) => {
+        toast.error(err)
+      })
+  }
 
   if (isLoading) {
     return <Loading />
@@ -49,12 +108,70 @@ const FieldDetail = () => {
 
               <div className='flex flex-col justify-between border-l-2 p-4 leading-normal text-white'>
                 <div className='flex justify-between'>
-                  <h5 className='mb-2 text-3xl font-bold tracking-tight'>
+                  <h5 className='mb-2 text-3xl font-bold tracking-tight' id='sth'>
                     {field.fieldName}
                   </h5>
                   <div className='flex justify-between'>
-                    <FaStar size='25px' className='mt-1 mx-1' color='yellow' />
-                    <div className='text-white text-lg mt-1.5'>4.5</div>
+                    <FaStar
+                      size='25px'
+                      className='mt-1 mx-1 cursor-pointer'
+                      color='yellow'
+                      data-bs-toggle='modal'
+                      data-bs-target={player && '#exampleModalCenter'}
+                      
+                    />
+                    <div className='text-white text-lg mt-1.5'>{stars}</div>
+                  </div>
+                  {/* rating modal */}
+                  <div
+                    className='modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto'
+                    id='exampleModalCenter'
+                    tabIndex={-1}
+                    aria-labelledby='exampleModalCenterTitle'
+                    aria-modal='true'
+                    role='dialog'
+                  >
+                    <div className='modal-dialog modal-dialog-centered relative w-auto pointer-events-none'>
+                      <div className='modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current'>
+                        <div className='modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md'>
+                          <h5
+                            className='text-xl font-medium leading-normal text-gray-800'
+                            id='exampleModalScrollableLabel'
+                          >
+                            My Rating
+                          </h5>
+                          <button
+                            type='button'
+                            className='btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline'
+                            data-bs-dismiss='modal'
+                            aria-label='Close'
+                          />
+                        </div>
+                        <div className='modal-body relative p-4  flex justify-start text-black'>
+                          {(playerRate > 0) && <ReactStars {...ratingStars}/>}
+                          {(playerRate === 0) && <ReactStars {...ratingStars}/>}
+                          <p className=' font-bold text-lg mt-1 ml-3'>
+                            {rating}
+                          </p>
+                        </div>
+                        <div className='modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md'>
+                          <button
+                            type='button'
+                            className='inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out'
+                            data-bs-dismiss='modal'
+                          >
+                            Close
+                          </button>
+                          <button
+                            type='button'
+                            className='inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1'
+                            onClick={submitRate}
+                          >
+                            Save changes
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className='flex text-lg'>
@@ -174,6 +291,7 @@ const FieldDetail = () => {
             </div>
           </div>
         </div>
+        <Booking field={field}/>
       </div>
     )
 }

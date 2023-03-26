@@ -14,13 +14,12 @@ export default function Header() {
   const dispatch = useDispatch()
   const { player, owner } = useSelector((state) => state.auth)
 
-  const onLogout = () => {
+  const onLogout = () => { 
     dispatch(logout())
     dispatch(logoutOwner())
     dispatch(reset())
     navigate('/')
   }
-
 
   useEffect(() => {
     // On page load or when changing themes, best to add inline in `head` to avoid FOUC
@@ -200,21 +199,61 @@ export default function Header() {
           <ul className='flex space-x-5'>
             {player || owner ? (
               <li className='nav-item p-2'>
-                <span>Welcome {player?.name || owner?.name} </span>
-                <button className='btn'>
-                  <div className='dropdown relative'>
-                    <a
-                      className='dropdown-toggle flex items-center hidden-arrow'
-                      href='/'
-                      id='dropdownMenuButton2'
-                      role='button'
-                      data-bs-toggle='dropdown'
-                      aria-expanded='false'
-                    >
-                      <FaUserCircle size={30} />
-                    </a>
-                    <ul
-                      className='
+                <div className='flex justify-between'>
+                  <div className='flex justify-center mr-2'>
+                    <div className='xl:w-56'>
+                      <div className='input-group relative flex flex-wrap items-stretch w-full'>
+                        <input
+                          type='search'
+                          className='form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+                          placeholder='Search'
+                          aria-label='Search'
+                          aria-describedby='button-addon2'
+                          id='btnSearch'
+                        />
+                        <button
+                          className='btn inline-block px-3 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center'
+                          type='button'
+                          onClick={() => {
+                            if (document.getElementById('btnSearch').value){
+                              navigate('/search/'+document.getElementById('btnSearch').value)
+                            }
+                          }}
+                          
+                        >
+                          <svg
+                            aria-hidden='true'
+                            focusable='false'
+                            data-prefix='fas'
+                            data-icon='search'
+                            className='w-4'
+                            role='img'
+                            xmlns='http://www.w3.org/2000/svg'
+                            viewBox='0 0 512 512'
+                          >
+                            <path
+                              fill='currentColor'
+                              d='M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z'
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <button className='btn'>
+                    <div className='dropdown relative'>
+                      <a
+                        className='dropdown-toggle flex items-center hidden-arrow'
+                        href='/'
+                        id='dropdownMenuButton2'
+                        role='button'
+                        data-bs-toggle='dropdown'
+                        aria-expanded='false'
+                      >
+                        <FaUserCircle size={30} />
+                      </a>
+                      <ul
+                        className='
     dropdown-menu
     min-w-max
     absolute
@@ -235,12 +274,12 @@ export default function Header() {
     left-auto
     right-0
   '
-                      aria-labelledby='dropdownMenuButton2'
-                    >
-                      <li>
-                        <a
-                          className='
-        dropdown-item
+                        aria-labelledby='dropdownMenuButton2'
+                      >
+                        <li>
+                          <a
+                            className='
+                          dropdown-item
         text-sm
         py-2
         px-4
@@ -252,15 +291,15 @@ export default function Header() {
         text-gray-700
         hover:bg-gray-100
       '
-                          href='/'
-                        >
-                          Profile
-                        </a>
-                      </li>
+                            href='/'
+                          >
+                            Profile-{player?.name}
+                          </a>
+                        </li>
 
-                      <li>
-                        <Link
-                          className='
+                        <li>
+                          <Link
+                            className='
         dropdown-item
         text-sm
         py-2
@@ -273,17 +312,17 @@ export default function Header() {
         text-gray-700
         hover:bg-gray-100
       '
-                          href='/'
-                          to={owner ? 'myfields' : 'mybooking'}
-                        >
-                          {player && (<p>My Booking</p>)}
-                          {owner && (<p>My Fields</p>)}
-                        </Link>
-                      </li>
+                            href='/'
+                            to={owner ? 'myfields' : 'mybooking'}
+                          >
+                            {player && <p>My Booking</p>}
+                            {owner && <p>My Fields</p>}
+                          </Link>
+                        </li>
 
-                      <li>
-                        <a
-                          className='
+                        <li>
+                          <a
+                            className='
         dropdown-item
         text-sm
         py-2
@@ -296,17 +335,18 @@ export default function Header() {
         text-gray-700
         hover:bg-gray-100
       '
-                          href='/'
-                        >
-                          <div className='flex' onClick={onLogout}>
-                            <FaSignOutAlt />
-                            Logout
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </button>
+                            href='/'
+                          >
+                            <div className='flex' onClick={onLogout}>
+                              <FaSignOutAlt />
+                              Logout
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </button>
+                </div>
               </li>
             ) : (
               <>

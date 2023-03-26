@@ -108,7 +108,7 @@ export const getField = createAsyncThunk(
   }
 )
 
-// get a single field
+// get fields
 export const getFieldByType = createAsyncThunk(
   'fields/getFieldType',
   async (type, thunkAPI) => {
@@ -126,6 +126,7 @@ export const getFieldByType = createAsyncThunk(
     }
   }
 )
+
 
 // upload image to Cloudinary
 export const uploadImg = createAsyncThunk(
@@ -152,6 +153,25 @@ export const deleteField = createAsyncThunk(
   async (fieldId, thunkAPI) => {
     try {
       return await fieldService.deleteField(fieldId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// search field by name
+export const searchFieldByName = createAsyncThunk(
+  'field/search',
+  async (fieldName, thunkAPI) => {
+    try {
+      return await fieldService.searchField(fieldName)
     } catch (error) {
       const message =
         (error.response &&
@@ -272,6 +292,20 @@ export const fieldSlice = createSlice({
         state.message = action.payload
       })
       .addCase(deleteField.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(searchFieldByName.pending, (state, action) => {
+        state.isSuccess = false
+        state.isLoading = true
+      })
+      .addCase(searchFieldByName.fulfilled, (state, action) => {
+        state.isSuccess = true
+        state.isLoading = false
+        state.fields = action.payload
+      })
+      .addCase(searchFieldByName.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

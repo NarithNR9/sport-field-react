@@ -6,12 +6,42 @@ import {
   FaVolleyballBall,
 } from 'react-icons/fa'
 import SliderSection from '../components/SliderSection'
+import { useSelector, useDispatch } from 'react-redux'
+import { getFields, getFieldByType, reset } from '../features/fields/fieldSlice'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Home = () => {
+  const dispatch = useDispatch()
   const [type, setType] = useState('All')
+  const [rateFieldss, setRateFieldss] = useState('')
+  const [rateFields, setRateFields] = useState('')
+
+  const { fields, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.fields
+  )
 
   useEffect(() => {
-// change the on active click for each field type
+    if (type === 'All') {
+      dispatch(getFields())
+      axios
+        .get('http://localhost:8080/field/rate/rating')
+        .then((res) => {
+          setRateFields(res.data)
+          setRateFieldss(res.data)
+        })
+        .catch((err) => {
+          toast.error(err)
+        })
+    } else {
+      dispatch(getFieldByType(type))
+      setRateFields(filterFieldsByType(rateFieldssnp, type))
+      console.log(rateFields)
+    }
+  }, [type])
+
+  useEffect(() => {
+    // change the on active click for each field type
     document.getElementById(type).classList.add('bg-emerald-900')
     const a = [...document.getElementsByClassName('clicked')].forEach((sth) => {
       if (document.getElementById(type) !== sth) {
@@ -19,6 +49,10 @@ const Home = () => {
       }
     })
   }, [type])
+
+  const filterFieldsByType = (fields, type) => {
+    return fields.filter((field) => field.type === type)
+  }
 
   return (
     <>
@@ -73,9 +107,14 @@ const Home = () => {
         </button>
       </div>
       <div className='ml-10 text-emerald-500 text-2xl font-semibold'>
+        Top Rated
+      </div>
+      <SliderSection fields={rateFields} />
+
+      <div className='ml-10 text-emerald-500 text-2xl font-semibold'>
         New To Town
       </div>
-      <SliderSection category={type} />
+      <SliderSection fields={fields} />
     </>
   )
 }

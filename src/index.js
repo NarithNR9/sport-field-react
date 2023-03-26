@@ -6,7 +6,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import 'tw-elements';
-import 'flowbite';
+// import "../node_modules/flowbite/dist/flowbite.min.js"
+// import 'flowbite';
 
 
 const container = document.getElementById('root');
@@ -16,7 +17,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
-    </Provider>
+    </Provider> 
   </React.StrictMode>
 );
 

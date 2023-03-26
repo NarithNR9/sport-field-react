@@ -45,22 +45,16 @@ const uploadImg = async (img) => {
   return response.data
 }
 
-// get user tickets
-const getTicket = async (ticketId, token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-
-  const response = await axios.get(API_URL + ticketId, config)
-  return response.data
-}
-
-// close tickets
+// delete field
 const deleteField = async (fieldId) => {
   const response = await axios.delete(API_URL + 'remove/' + fieldId)
   return response.data.message
+}
+
+// search fields
+const searchField = async (fieldName) => {
+  const response = await axios.get(API_URL + 'search/' + fieldName) 
+  return response.data
 }
 
 const ticketService = {
@@ -71,6 +65,7 @@ const ticketService = {
   getField,
   getFieldByType,
   deleteField,
+  searchField,
   uploadImg
 }
 
