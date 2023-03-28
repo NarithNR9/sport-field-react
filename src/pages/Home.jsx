@@ -35,7 +35,7 @@ const Home = () => {
         })
     } else {
       dispatch(getFieldByType(type))
-      setRateFields(filterFieldsByType(rateFieldssnp, type))
+      setRateFields(filterFieldsByType(rateFields, type))
       console.log(rateFields)
     }
   }, [type])

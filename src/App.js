@@ -14,6 +14,7 @@ import UpdateField from './pages/UpdateField'
 import Footer from './components/Footer'
 import FieldDetail from './pages/FieldDetail'
 import SearchField from './pages/SearchField'
+import MyBookings from './pages/MyBookings'
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path='/updatefield/:fieldId' element={<UpdateField />} />
           <Route path='/field/:fieldId' element={<FieldDetail />}/>
           <Route path='/search/:fieldName' element={<SearchField />}/>
+          <Route path='/myBookings' element={<MyBookings />}/>
         </Routes> 
         <Footer />
       </Router>

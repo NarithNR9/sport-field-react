@@ -10,67 +10,12 @@ import {
 } from '../features/booking/bookingSlice'
 import Loading from '../components/Loading'
 
-const books = [
-  {
-    id: '1',
-    field_id: '13',
-    player_id: '1',
-    date: '2023-03-06',
-    time: '17:00,18:00',
-    status: 'Half',
-    approve: '',
-    booked: '2023-02-21 11:00:02',
-    pitch_number: '1',
-  },
-  {
-    id: '2',
-    field_id: '13',
-    player_id: '1',
-    date: '2023-03-06',
-    time: '19:00,20:00',
-    status: 'Full',
-    approve: '2023-02-21 12:00:02',
-    booked: '2023-02-21 11:00:02',
-    pitch_number: '1',
-  },
-  {
-    id: '3',
-    field_id: '13',
-    player_id: '1',
-    date: '2023-03-07',
-    time: '19:00,20:00',
-    status: 'Full',
-    approve: '2023-02-21 12:00:02',
-    booked: '2023-02-21 11:00:02',
-    pitch_number: '2',
-  },
-]
-
 const data = []
 for (let i = 0; i < 8; i++) {
   // generate 7 days from today
   const today = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000)
   data.push(today.toUTCString().slice(5, 16))
 }
-// console.log(new Date('31 Mar 2023'.replace(
-//   '01 Apr 2023'.split(' ')[0],
-//           +'01 Apr 2023'.split(' ')[0] + 1
-//         )))
-data.map((date, index) => {
-  // console.log(new Date(new Date().getTime() + index * 24 * 60 * 60 * 1000).toISOString())
-  // console.log(new Date(date.replace(
-  //       date.split(' ')[0],
-  //       +date.split(' ')[0] + 1
-  //     )))
-  // console.log(new Date(
-  //   date.replace(
-  //     date.split(' ')[0],
-  //     +date.split(' ')[0] + 1
-  //   )
-  // )
-  //   .toISOString()
-  //   .slice(0, 10))
-})
 
 const Booking = ({ field }) => {
   const dispatch = useDispatch()

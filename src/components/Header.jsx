@@ -21,67 +21,6 @@ export default function Header() {
     navigate('/')
   }
 
-  useEffect(() => {
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    if (
-      localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      // document.documentElement.classList.add('dark')
-      setTheme('dark')
-    } else {
-      setTheme('light')
-      // document.documentElement.classList.remove('dark')
-    }
-  }, [])
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [theme])
-
-  const DarkModeHandler = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
-  }
-
-  const Details = [
-    {
-      title: 'About Us',
-      link: '/aboutus',
-    },
-    {
-      title: 'Booking',
-      link: '/booking',
-    },
-    {
-      title: 'Service',
-      link: '/service',
-    },
-    {
-      title: 'Register',
-      link: '/register',
-    },
-  ]
-
-  const navList = (
-    <div className='lg:flex'>
-      {Details.map((items, key) => (
-        <p className='relative group h-full py-3 ' key={key}>
-          <Link
-            to={items.link}
-            className=' text-text-light dark:text-text-dark block px-4 py-2 text-sm'
-            id='menu-item-0'
-          >
-            <span className='font-bold text-lg'>{items.title}</span>
-            <span className='absolute -bottom-1 left-0 w-0 h-[2px] dark:bg-text-dark bg-text-light transition-all group-hover:w-full duration-500'></span>
-          </Link>
-        </p>
-      ))}
-    </div>
-  )
 
   return (
     <nav
@@ -137,7 +76,7 @@ export default function Header() {
           </svg>
         </button>
         <div
-          className='collapse navbar-collapse flex-grow items-center'
+          className=' navbar-collapse flex-grow items-center'
           id='navbarSupportedContent'
         >
           <a
@@ -313,7 +252,7 @@ export default function Header() {
         hover:bg-gray-100
       '
                             href='/'
-                            to={owner ? 'myfields' : 'mybooking'}
+                            to={owner ? 'myfields' : 'mybookings'}
                           >
                             {player && <p>My Booking</p>}
                             {owner && <p>My Fields</p>}

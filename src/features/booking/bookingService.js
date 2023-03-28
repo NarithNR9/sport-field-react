@@ -2,9 +2,16 @@ import axios from 'axios'
 
 const API_URL = '/bookings/'
 
-// get owner fields
+// get all bookings
 const getBookings = async () => {
   const response = await axios.get(API_URL)
+  return response.data
+}
+
+// get player bookings
+const getMyBookings = async (playerId) => {
+  const response = await axios.get(API_URL+"/mine/"+playerId)
+  console.log(playerId)
   return response.data
 }
 
@@ -16,6 +23,7 @@ const createBooking = async (bookingData) => {
 
 const bookingService = {
   getBookings,
+  getMyBookings,
   createBooking
 }
 
