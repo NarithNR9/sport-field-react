@@ -48,6 +48,25 @@ export const getMyBookings = createAsyncThunk(
   }
 )
 
+// get owner bookings
+export const getOwnerBookings = createAsyncThunk(
+  'booking/getOwnerBookings',
+  async (ref, thunkAPI) => {
+    try {
+      return await bookingService.getOwnerBookings(ref)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 // create new booking
 export const createBooking = createAsyncThunk(
   'booking/create',
@@ -95,6 +114,18 @@ export const bookingSlice = createSlice({
         state.bookings = action.payload
       })
       .addCase(getMyBookings.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(getOwnerBookings.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getOwnerBookings.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.bookings = action.payload
+      })
+      .addCase(getOwnerBookings.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

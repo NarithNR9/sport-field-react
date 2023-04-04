@@ -1,30 +1,46 @@
-import axios from 'axios'
+import axios from "axios";
 
-const API_URL = '/bookings/'
+const API_URL = "/bookings/";
 
 // get all bookings
 const getBookings = async () => {
-  const response = await axios.get(API_URL)
-  return response.data
-}
+  const response = await axios.get(API_URL);
+  return response.data;
+};
 
 // get player bookings
 const getMyBookings = async (playerId) => {
-  const response = await axios.get(API_URL+"/mine/"+playerId)
-  console.log(playerId)
-  return response.data
-}
+  const response = await axios.get(API_URL + "/mine/" + playerId);
+  return response.data;
+};
+
+// get owner bookings
+const getOwnerBookings = async (ref) => {
+  const response = await axios.get(
+    API_URL +
+      "/owner?fieldId=" +
+      ref[0] +
+      "&type=" +
+      ref[1] +
+      "&pitchNumber=" +
+      ref[2] +
+      "&date=" +
+      ref[3]
+  );
+  return response.data;
+};
 
 // create new booking
 const createBooking = async (bookingData) => {
-  const response = await axios.post(API_URL , bookingData)
-  return response.data.message
-}
+  const response = await axios.post(API_URL, bookingData);
+  return response.data.message;
+};
 
 const bookingService = {
   getBookings,
   getMyBookings,
-  createBooking
-}
+  getOwnerBookings,
+  createBooking,
+};
 
-export default bookingService
+export default bookingService;

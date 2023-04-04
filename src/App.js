@@ -15,6 +15,7 @@ import Footer from './components/Footer'
 import FieldDetail from './pages/FieldDetail'
 import SearchField from './pages/SearchField'
 import MyBookings from './pages/MyBookings'
+import OwnerBookings from './pages/OwnerBookings'
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path='/field/:fieldId' element={<FieldDetail />}/>
           <Route path='/search/:fieldName' element={<SearchField />}/>
           <Route path='/myBookings' element={<MyBookings />}/>
+          <Route path='/ownerBookings' element={<OwnerBookings />}/>
         </Routes> 
         <Footer />
       </Router>

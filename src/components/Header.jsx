@@ -7,8 +7,6 @@ import { logout, logoutOwner, reset } from '../features/auth/authSlice'
 import { toast } from 'react-toastify'
 
 export default function Header() {
-  const [openNav, setOpenNav] = useState(false)
-  const [theme, setTheme] = useState('light')
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -79,7 +77,7 @@ export default function Header() {
           className=' navbar-collapse flex-grow items-center'
           id='navbarSupportedContent'
         >
-          <a
+          <Link
             className='
         flex
         items-center
@@ -91,7 +89,7 @@ export default function Header() {
         mr-1
         w-12
       '
-            href='/'
+            to=''
           >
             <img
               src={logo}
@@ -99,7 +97,7 @@ export default function Header() {
               alt=''
               loading='lazy'
             />
-          </a>
+          </Link>
           {/* Left links */}
           <ul className='navbar-nav flex flex-col pl-0 list-style-none mr-auto'>
             <li className='nav-item p-2'>
@@ -110,22 +108,6 @@ export default function Header() {
                 Sport Field Kh
               </Link>
             </li>
-            {/* <li className='nav-item p-2'>
-              <Link
-                className='nav-link text-xl text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0'
-                to='/'
-              >
-                Team
-              </Link>
-            </li>
-            <li className='nav-item p-2'>
-              <Link
-                className='nav-link text-xl text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0'
-                to='/'
-              >
-                Projects
-              </Link>
-            </li> */}
           </ul>
           {/* Left links */}
         </div>
@@ -251,11 +233,10 @@ export default function Header() {
         text-gray-700
         hover:bg-gray-100
       '
-                            href='/'
-                            to={owner ? 'myfields' : 'mybookings'}
+                            to={owner ? 'ownerBookings' : 'mybookings'}
                           >
-                            {player && <p>My Booking</p>}
-                            {owner && <p>My Fields</p>}
+                            {owner && <p>Owner Bookings</p>}
+                            {player && <p>My Bookings</p>}
                           </Link>
                         </li>
 
