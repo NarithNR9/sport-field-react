@@ -111,10 +111,8 @@ const LoginOwner = () => {
                       </div>
                       <div className='text-center pt-1 mb-5 pb-1'>
                         <button
-                          className='bg-green-500 duration-300 inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full mb-3'
+                          className='bg-green-500 duration-300 inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition ease-in-out w-full mb-3'
                           type='submit'
-                          data-mdb-ripple='true'
-                          data-mdb-ripple-color='light'
                         >
                           Owner Log in
                         </button>

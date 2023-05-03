@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOwnerBookings } from "../features/booking/bookingSlice";
 import { Link } from "react-router-dom";
 import { getOwnerFields } from "../features/fields/fieldSlice";
+import Loading from "../components/Loading";
 
 const OwnerBookings = () => {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -20,7 +21,6 @@ const OwnerBookings = () => {
 
   const { owner } = useSelector((state) => state.auth);
 
-  const [filter, setFilter] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,13 +39,13 @@ const OwnerBookings = () => {
         <div className='ml-2 font-bold'>{field[0]?.fieldName}</div>
         <select
           onChange={(e) => setType(e.target.value)}
+          value={type}
           className='bg-green-50 border border-green-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:outline-none block p-2.5'
         >
           {fields?.map((field, index) => (
             <option
               value={field.type}
               key={index}
-              selected={field.type === "Football" ? true : false}
             >
               {field.type}
             </option>
@@ -138,7 +138,7 @@ const OwnerBookings = () => {
           </tbody>
         </table>
       </div>
-      {bookings?.length == 0 && <div className="flex justify-center text-xl mt-2 text-yellow-500">No booking records match this filter!</div>}
+      {(bookings?.length == 0 && !isLoading) && <div className="flex justify-center text-xl mt-2 text-yellow-500">No booking records match this filter!</div>}
     </div>
   );
 };

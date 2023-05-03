@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getFields, getFieldByType, reset } from '../features/fields/fieldSlice'
 import { useNavigate, Link } from 'react-router-dom'
 import Loading from '../components/Loading'
+import "../App.css"
 
 const Left = (props) => {
   const { className, onClick, color } = props
@@ -37,7 +38,7 @@ const SliderSection = ({ fields, type }) => {
   )
   const settings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: fields.length >= 3 ? 3 : fields.length,
     slidesToScroll: 3,
@@ -64,6 +65,10 @@ const SliderSection = ({ fields, type }) => {
       },
     ],
   }
+  if (type !== "All") {
+  
+    fields = fields.filter((field) => field.type === type)
+  }
 
   useEffect(() => {
     return () => {
@@ -72,6 +77,7 @@ const SliderSection = ({ fields, type }) => {
       }
     }
   }, [dispatch, isSuccess])
+
 
 
 

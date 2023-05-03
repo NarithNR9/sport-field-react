@@ -35,7 +35,7 @@ const FieldCard = ({ field }) => {
         </Link>
         <div className='flex justify-between'>
           <p className='text-base mb-1 font-normal text-gray-700 dark:text-slate-100'>
-            {field.location}
+            {field.district}
           </p>
           <p className='text-base mb-1 font-normal text-gray-700 dark:text-slate-100'>
             {field.type}

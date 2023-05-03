@@ -1,57 +1,72 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import {
   FaFutbol,
   FaMedal,
   FaTableTennis,
   FaVolleyballBall,
-} from 'react-icons/fa'
-import SliderSection from '../components/SliderSection'
-import { useSelector, useDispatch } from 'react-redux'
-import { getFields, getFieldByType, reset } from '../features/fields/fieldSlice'
-import axios from 'axios'
-import { toast } from 'react-toastify'
+} from "react-icons/fa";
+import SliderSection from "../components/SliderSection";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  getFields,
+  getFieldByType,
+  reset,
+} from "../features/fields/fieldSlice";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Home = () => {
-  const dispatch = useDispatch()
-  const [type, setType] = useState('All')
-  const [rateFieldss, setRateFieldss] = useState('')
-  const [rateFields, setRateFields] = useState('')
+  const dispatch = useDispatch();
+  const [type, setType] = useState("All");
+  const [nearFields, setNearFields] = useState([]);
+  const [rateFields, setRateFields] = useState([]);
 
   const { fields, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.fields
-  )
+  );
+
+  const { player } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (type === 'All') {
-      dispatch(getFields())
+    if (type === "All") {
+      // get all fields
+      dispatch(getFields());
+      // get rated fields
       axios
-        .get('http://localhost:8080/field/rate/rating')
+        .get("http://localhost:8080/field/rate/rating")
         .then((res) => {
-          setRateFields(res.data)
-          setRateFieldss(res.data)
+          setRateFields(res.data);
         })
         .catch((err) => {
-          toast.error(err)
-        })
-    } else {
-      dispatch(getFieldByType(type))
-      setRateFields(filterFieldsByType(rateFields, type))
-    }
-  }, [type])
+          toast.error(err);
+        });
+      // get near fields
+      if (player) {
+        axios
+          .get("http://localhost:8080/field/distance/" + player.id)
+          .then((res) => {
+            setNearFields(res.data);
+          })
+          .catch((err) => {
+            toast.error(err);
+          });
+      }
+    } 
+  }, [type]);
 
   useEffect(() => {
     // change the on active click for each field type
-    document.getElementById(type).classList.add('bg-emerald-900')
-    const a = [...document.getElementsByClassName('clicked')].forEach((sth) => {
+    document.getElementById(type).classList.add("bg-emerald-900");
+    const a = [...document.getElementsByClassName("clicked")].forEach((sth) => {
       if (document.getElementById(type) !== sth) {
-        sth.classList.remove('bg-emerald-900')
+        sth.classList.remove("bg-emerald-900");
       }
-    })
-  }, [type])
+    });
+  }, [type]);
 
   const filterFieldsByType = (fields, type) => {
-    return fields.filter((field) => field.type === type)
-  }
+    return fields.filter((field) => field.type === type);
+  };
 
   return (
     <>
@@ -61,7 +76,7 @@ const Home = () => {
       >
         <button
           onClick={() => {
-            setType('All')
+            setType("All");
             // document.getElementById(type).classList.toggle('bg-red-900')
           }}
           id='All'
@@ -74,7 +89,7 @@ const Home = () => {
         <button
           id='Football'
           onClick={() => {
-            setType('Football')
+            setType("Football");
           }}
           type='button'
           className='clicked inline-flex items-center px-4 py-2 text-lg font-medium text-gray-900 bg-transparent border border-b border-gray-900 hover:bg-emerald-800 hover:text-white  dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-emerald-900 '
@@ -84,7 +99,7 @@ const Home = () => {
         </button>
         <button
           onClick={() => {
-            setType('Volleyball')
+            setType("Volleyball");
           }}
           id='Volleyball'
           type='button'
@@ -95,7 +110,7 @@ const Home = () => {
         </button>
         <button
           onClick={() => {
-            setType('Tennis')
+            setType("Tennis");
           }}
           id='Tennis'
           type='button'
@@ -105,17 +120,27 @@ const Home = () => {
           Tennis
         </button>
       </div>
+
+      {(player && nearFields.length > 0) && (
+        <>
+          <div className='ml-10 text-emerald-500 text-2xl font-semibold'>
+            Nearest You
+          </div>
+          <SliderSection fields={nearFields} type={type} />
+        </>
+      )}
+
       <div className='ml-10 text-emerald-500 text-2xl font-semibold'>
         Top Rated
       </div>
-      <SliderSection fields={rateFields} />
+      <SliderSection fields={rateFields} type={type} />
 
       <div className='ml-10 text-emerald-500 text-2xl font-semibold'>
         New To Town
       </div>
-      <SliderSection fields={fields} />
+      <SliderSection fields={fields} type={type} />
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

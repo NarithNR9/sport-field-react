@@ -48,8 +48,8 @@ const Register = () => {
       value: 'Khan Chamkar Mon',
     },
     {
-      name: 'Khan Daun Penh ',
-      value: 'Khan Daun Penh ',
+      name: 'Khan Daun Penh',
+      value: 'Khan Daun Penh',
     },
     {
       name: 'Khan Prampir Makara',
@@ -72,16 +72,16 @@ const Register = () => {
       value: 'Khan Russey Keo',
     },
     {
-      name: 'Khan Sen Sok ',
-      value: 'Khan Sen Sok ',
+      name: 'Khan Sen Sok',
+      value: 'Khan Sen Sok',
     },
     {
       name: 'Khan Pou Senchey',
       value: 'Khan Pou Senchey',
     },
     {
-      name: 'Khan Chroy Changvar ',
-      value: 'Khan Chroy Changvar ',
+      name: 'Khan Chroy Changvar',
+      value: 'Khan Chroy Changvar',
     },
     {
       name: 'Khan Prek Pnov',
@@ -96,8 +96,8 @@ const Register = () => {
       value: 'Khan Boeng Keng Kang',
     },
     {
-      name: 'Khan Kamboul ',
-      value: 'Khan Kamboul ',
+      name: 'Khan Kamboul',
+      value: 'Khan Kamboul',
     },
   ]
 
