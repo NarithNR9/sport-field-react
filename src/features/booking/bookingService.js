@@ -36,11 +36,18 @@ const createBooking = async (bookingData) => {
   return response.data.message;
 };
 
+// cancel booking
+const cancelBooking = async (bookingId) => {
+  const response = await axios.put(API_URL + "cancel/" + bookingId);
+  return response.data.message;
+};
+
 const bookingService = {
   getBookings,
   getMyBookings,
   getOwnerBookings,
   createBooking,
+  cancelBooking,
 };
 
 export default bookingService;

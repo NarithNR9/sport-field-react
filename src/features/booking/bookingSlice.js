@@ -86,11 +86,30 @@ export const createBooking = createAsyncThunk(
   }
 )
 
+// create new booking
+export const cancelBooking = createAsyncThunk(
+  'booking/cancel',
+  async (bookingId, thunkAPI) => {
+    try {
+      return await bookingService.cancelBooking(bookingId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const bookingSlice = createSlice({
   name: 'booking',
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    resetB: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -143,8 +162,21 @@ export const bookingSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
+      .addCase(cancelBooking.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(cancelBooking.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.message = action.payload
+      })
+      .addCase(cancelBooking.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
   },
 })
 
-export const { reset } = bookingSlice.actions
+export const { resetB } = bookingSlice.actions
 export default bookingSlice.reducer

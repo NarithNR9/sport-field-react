@@ -176,7 +176,7 @@ const MyBookings = () => {
                         'w-fit p-2 text-white rounded-md uppercase text-sm ' +
                         (booking.status === 'Half'
                           ? 'bg-yellow-400'
-                          : 'bg-green-600')
+                          : booking.status === 'Full' ? 'bg-green-600': 'bg-stone-700 text-xs')
                       }
                     >
                       {booking.status}

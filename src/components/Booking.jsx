@@ -51,6 +51,7 @@ const Booking = ({ field }) => {
         element.field_id === field.field_id &&
         element.date === date &&
         element.time.split(',').includes(time) &&
+        element.status !== 'Cancel' &&
         element.pitch_number.toString() === pitchNum.toString()
       ) {
         if (element.status === 'Full') {
