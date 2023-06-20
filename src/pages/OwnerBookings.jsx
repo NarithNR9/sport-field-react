@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOwnerBookings, resetB } from "../features/booking/bookingSlice";
+import { getBlacklists } from "../features/blacklist/blacklistSlice";
 import { Link } from "react-router-dom";
 import { getOwnerFields, reset } from "../features/fields/fieldSlice";
 import Loading from "../components/Loading";
 import CancelModal from "../components/CancelModal";
+import BanPlayerModal from "../components/BanPlayerModal";
 
 const OwnerBookings = () => {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -16,6 +18,8 @@ const OwnerBookings = () => {
   const { bookings, isError, isLoading } = useSelector(
     (state) => state.booking
   );
+
+  const { blacklists } = useSelector((state) => state.blacklist);
 
   const dispatch = useDispatch();
 
@@ -29,9 +33,23 @@ const OwnerBookings = () => {
   //   dispatch(reset());
   // }
 
+  const handleActionChange = (e) => {
+    if (e.target.value.split("-")[0] === "Cancel") {
+      document
+        ?.getElementById("btn-cancel-" + e.target.value?.split("-")[1])
+        ?.click();
+    } else if (e.target.value.split("-")[0] === "Ban") {
+      document
+        ?.getElementById("btn-ban-" + e.target.value?.split("-")[1])
+        ?.click();
+    }
+    e.target.value = "Action";
+  };
+
   useEffect(() => {
     if (field[0]) {
       dispatch(getOwnerBookings([field[0]?.field_id, type, pitchNum, date]));
+      dispatch(getBlacklists(field[0].field_id));
     }
   }, [fields, type, pitchNum, date]);
 
@@ -76,7 +94,7 @@ const OwnerBookings = () => {
         </div>
       </div>
 
-      <div className="relative mt-2 overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative mt-2 overflow-x-auto shadow-md sm:rounded-lg z-0">
         <table className="w-full text-sm sm:text-base text-left">
           <thead className="text-xs sm:text-sm text-gray-700 uppercase bg-green-100  ">
             <tr>
@@ -134,7 +152,15 @@ const OwnerBookings = () => {
                     {booking.status}
                   </div>
                 </td>
-                <td className="px-5 py-4 font-semibold">
+                <td
+                  className={
+                    blacklists.find(
+                      (obj) => obj.player_id === booking?.player_id
+                    )
+                      ? "text-red-600 px-5 py-4 font-semibold"
+                      : "px-5 py-4 font-semibold"
+                  }
+                >
                   {booking?.phone_number?.substr(0, 3) +
                     " " +
                     booking?.phone_number?.substr(3, 3) +
@@ -142,17 +168,38 @@ const OwnerBookings = () => {
                     booking?.phone_number?.substr(6, 4)}
                 </td>
                 <td>
-                  {booking.status !== "Cancel" && (
-                    <button
-                      type="button"
-                      className="w-fit p-1 bg-stone-200 text-red-500 font-bold text-sm rounded-md "
-                      data-bs-toggle="modal"
-                      data-bs-target={"#deleteModal" + bookingProp?.booking_id}
-                      onClick={() => setBookingProp(booking)}
-                    >
+                  <select
+                    onChange={handleActionChange}
+                    id="action"
+                    className="bg-green-50 border border-green-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:outline-none block p-2.5"
+                  >
+                    <option value="Action">--Action--</option>
+                    <option value="Checkout">Checkout</option>
+                    <option value={"Cancel-" + booking?.booking_id}>
                       Cancel
-                    </button>
-                  )}
+                    </option>
+                    <option value={"Ban-" + booking?.booking_id}>Ban</option>
+                  </select>
+                  <button
+                    id={"btn-cancel-" + booking?.booking_id}
+                    className="hidden"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target={"#deleteModal" + bookingProp?.booking_id}
+                    onClick={() => setBookingProp(booking)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    id={"btn-ban-" + booking?.booking_id}
+                    className="hidden"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target={"#banPlayerModal" + bookingProp?.booking_id}
+                    onClick={() => setBookingProp(booking)}
+                  >
+                    Ban
+                  </button>
                 </td>
               </tr>
             ))}
@@ -160,6 +207,7 @@ const OwnerBookings = () => {
         </table>
       </div>
       <CancelModal booking={bookingProp} />
+      <BanPlayerModal booking={bookingProp} blacklists={blacklists} />
       {bookings?.length == 0 && !isLoading && (
         <div className="flex justify-center text-xl mt-2 text-yellow-500">
           No booking records match this filter!

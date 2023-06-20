@@ -7,7 +7,7 @@ const CancelModal = ({ booking }) => {
 
   const handleCancelBooking = () => {
     dispatch(cancelBooking(booking.booking_id));
-    location.reload()
+    location.reload();
   };
 
   return (
@@ -38,13 +38,19 @@ const CancelModal = ({ booking }) => {
             />
           </div>
           <div className="modal-body relative p-4">
-            Please make sure to inform the player after cancellation. <br />
-            Player Number:{" "}
-            {booking?.phone_number?.substr(0, 3) +
-              " " +
-              booking?.phone_number?.substr(3, 3) +
-              " " +
-              booking?.phone_number?.substr(6, 4)}
+            {booking?.status === "Cancel" ? (
+              <p>This booking is already been cancelled.</p>
+            ) : (
+              <div>
+                Please make sure to inform the player after cancellation. <br />
+                Player Number:{" "}
+                {booking?.phone_number?.substr(0, 3) +
+                  " " +
+                  booking?.phone_number?.substr(3, 3) +
+                  " " +
+                  booking?.phone_number?.substr(6, 4)}
+              </div>
+            )}
           </div>
           <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
             <button
@@ -69,11 +75,12 @@ const CancelModal = ({ booking }) => {
             >
               Close
             </button>
-            <button
-              data-bs-dismiss="modal"
-              onClick={() => handleCancelBooking()}
-              type="button"
-              className="px-6
+            {booking?.status !== "Cancel" && (
+              <button
+                data-bs-dismiss="modal"
+                onClick={() => handleCancelBooking()}
+                type="button"
+                className="px-6
 py-2.5
 bg-red-600
 text-white
@@ -90,9 +97,10 @@ transition
 duration-150
 ease-in-out
 ml-1"
-            >
-              Cancel Booking
-            </button>
+              >
+                Cancel Booking
+              </button>
+            )}
           </div>
         </div>
       </div>
