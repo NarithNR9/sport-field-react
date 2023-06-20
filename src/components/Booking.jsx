@@ -63,6 +63,7 @@ const Booking = ({ field }) => {
               ele.date === date &&
               ele.time.split(',').includes(time) &&
               ele.field_id === field.field_id &&
+              ele.status !== 'Cancel' &&
               ele.pitch_number == pitchNum
           )
           if (twoHalfs.length > 1) {
