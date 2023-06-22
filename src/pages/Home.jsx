@@ -33,7 +33,7 @@ const Home = () => {
       dispatch(getFields());
       // get rated fields
       axios
-        .get("http://localhost:8080/field/rate/rating")
+        .get(process.env.REACT_APP_BASE_URL + "/field/rate/rating")
         .then((res) => {
           setRateFields(res.data);
         })
@@ -43,7 +43,7 @@ const Home = () => {
       // get near fields
       if (player) {
         axios
-          .get("http://localhost:8080/field/distance/" + player.id)
+          .get(process.env.REACT_APP_BASE_URL + "/field/distance/" + player.id)
           .then((res) => {
             setNearFields(res.data);
           })

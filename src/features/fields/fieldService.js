@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '/field/'
+const API_URL = process.env.REACT_APP_BASE_URL + '/field/'
 const API_Cloudinary = 'https://api.cloudinary.com/v1_1/dzh7xzbbz/image/upload'
 
 // get owner fields

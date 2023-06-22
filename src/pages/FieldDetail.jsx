@@ -52,13 +52,13 @@ const FieldDetail = () => {
 
   useEffect(() => {
     dispatch(getField(fieldId));
-    axios.get("http://localhost:8080/field/stars/" + fieldId).then((res) => {
+    axios.get(process.env.REACT_APP_BASE_URL + "/field/stars/" + fieldId).then((res) => {
       setStars(res.data[0].avgStars);
     });
     if (player)
       axios
         .get(
-          "http://localhost:8080/field/playerRate/" + player.id + "/" + fieldId
+          process.env.REACT_APP_BASE_URL + "/field/playerRate/" + player.id + "/" + fieldId
         )
         .then((res) => {
           if (res.data.length !== 0) {
@@ -73,7 +73,7 @@ const FieldDetail = () => {
 
   const submitRate = () => {
     axios
-      .post("http://localhost:8080/field/rate", {
+      .post(process.env.REACT_APP_BASE_URL + "/field/rate", {
         fieldId: fieldId,
         playerId: player.id,
         stars: rating,
@@ -81,7 +81,7 @@ const FieldDetail = () => {
       .then((res) => {
         toast.success(res.data.message);
         axios
-          .get("http://localhost:8080/field/stars/" + fieldId)
+          .get(process.env.REACT_APP_BASE_URL + "/field/stars/" + fieldId)
           .then((res) => {
             setStars(res.data[0].avgStars);
           });

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '/players'
+const API_URL = process.env.REACT_APP_BASE_URL + '/players'
 
 // register
 const register = async (userData) => {

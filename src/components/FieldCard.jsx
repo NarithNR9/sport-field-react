@@ -7,7 +7,7 @@ const FieldCard = ({ field }) => {
   const [stars,setStars] = useState([])
 
   useEffect(() => {
-    axios.get('http://localhost:8080/field/stars/' + field.field_id).then((res) => {
+    axios.get(process.env.REACT_APP_BASE_URL + '/field/stars/' + field.field_id).then((res) => {
       setStars(res.data[0].avgStars)
     })
   })

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/owners/ban/";
+const API_URL = process.env.REACT_APP_BASE_URL + "/owners/ban/";
 
 // get all bookings
 const getBlacklists = async (fieldId) => {
