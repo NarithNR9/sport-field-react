@@ -36,7 +36,7 @@ const registerOwner = async (userData) => {
 
 // login
 const loginOwner = async (ownerData) => {
-  const response = await axios.post('/owners/login', ownerData)
+  const response = await axios.post(API_URL + '/owners/login', ownerData)
 
   if (response.data) {
     localStorage.setItem('owner', JSON.stringify(response.data))
