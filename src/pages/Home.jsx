@@ -71,7 +71,7 @@ const Home = () => {
   return (
     <>
       <div
-        className='inline-flex rounded-md shadow-sm bg-emerald-400 my-5 ml-10'
+        className='md:inline-flex rounded-md shadow-sm bg-emerald-400 my-5 ml-10'
         role='group'
       >
         <button
